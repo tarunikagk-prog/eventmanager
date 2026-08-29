@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  ORGANIZER
+  ATTENDEE
+}
+
+enum EventCategory {
+  CONFERENCE
+  WORKSHOP
+  SEMINAR
+  SPORTS
+  CULTURAL
+  NETWORKING
+  OTHER
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  PENDING
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  passwordHash  String
+  role          Role     @default(ATTENDEE)
+  avatar        String?
+  bio           String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  events        Event[]  @relation("OrganizerEvents")
+  registrations Registration[]
+  notifications Notification[]
+
+  @@index([role])
+  @@index([email])
+}
+
+model Event {
+  id               String          @id @default(cuid())
+  title            String
+  description      String
+  category         EventCategory
+  location         String
+  startDateTime    DateTime
+  endDateTime      DateTime
+  registrationDeadline DateTime
+  imageUrl         String?
+  capacity         Int
+  organizerId      String
+  organizer        User            @relation("OrganizerEvents", fields: [organizerId], references: [id], onDelete: Cascade)
+  registrations    Registration[]
+  isCancelled      Boolean         @default(false)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@index([organizerId])
+  @@index([startDateTime])
+  @@index([category])
+}
+
+model Registration {
+  id         String   @id @default(cuid())
+  userId     String
+  eventId    String
+  status     AttendanceStatus @default(PENDING)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event      Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+  @@index([userId])
+  @@index([eventId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
