@@ -21,40 +21,87 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="mx-auto max-w-md rounded-3xl border border-slate-800 bg-slate-900 p-8">
-      <p className="text-sm uppercase tracking-[0.2em] text-indigo-200">Welcome back</p>
-      <h1 className="mt-3 text-3xl font-bold text-white">Login</h1>
+    <div className="auth-shell">
+      <div className="auth-panel">
+        <div className="auth-visual">
+          <div className="visual-header">
+            <div className="brand-mark">E</div>
+            <span>Event hub</span>
+          </div>
 
-      <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-        <div>
-          <label className="mb-2 block text-sm text-slate-300">Email</label>
-          <input
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none"
-          />
-        </div>
-        <div>
-          <label className="mb-2 block text-sm text-slate-300">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none"
-          />
-        </div>
-        {error ? <p className="text-sm text-rose-400">{error}</p> : null}
-        <button type="submit" className="w-full rounded-xl bg-indigo-500 px-4 py-3 font-medium text-white hover:bg-indigo-400">
-          Sign in
-        </button>
-      </form>
+          <div className="visual-card">
+            <p className="visual-tag">Trending this week</p>
+            <h2>Sunset Live</h2>
+            <p>12 Aug • Bengaluru • From ₹899</p>
+          </div>
 
-      <p className="mt-4 text-sm text-slate-400">
-        Need an account?{' '}
-        <Link to="/register" className="text-indigo-300">
-          Create one
-        </Link>
-      </p>
+          <div className="visual-stats">
+            <div>
+              <strong>12k+</strong>
+              <span>bookings</span>
+            </div>
+            <div>
+              <strong>4.9★</strong>
+              <span>rating</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="auth-card">
+          <div className="auth-brand">
+            <div className="brand-mark small">E</div>
+            <span>BookMyEvent</span>
+          </div>
+
+          <div className="auth-copy">
+            <p className="eyebrow">Welcome back</p>
+            <h1>Login to continue</h1>
+            <p>Discover events, book tickets, and manage your plans in one place.</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div className="field-group">
+              <label htmlFor="email">Email or phone</label>
+              <input
+                id="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="you@example.com"
+              />
+            </div>
+
+            <div className="field-group">
+              <div className="label-row">
+                <label htmlFor="password">Password</label>
+                <Link to="/forgot-password" className="text-link">Forgot Password?</Link>
+              </div>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder="Enter your password"
+              />
+            </div>
+
+            {error ? <p className="error-text">{error}</p> : null}
+
+            <button type="submit" className="login-btn">Login</button>
+          </form>
+
+          <div className="divider"><span>or continue with</span></div>
+
+          <div className="social-row">
+            <button className="social-btn">Google</button>
+            <button className="social-btn">Apple</button>
+          </div>
+
+          <p className="signup-text">
+            Don’t have an account?{' '}
+            <Link to="/register" className="text-link strong">Sign Up</Link>
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
